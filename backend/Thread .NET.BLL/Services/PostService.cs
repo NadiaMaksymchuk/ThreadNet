@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Thread_.NET.BLL.Exceptions;
 using Thread_.NET.BLL.Hubs;
 using Thread_.NET.BLL.Services.Abstract;
 using Thread_.NET.Common.DTO.Post;
+using Thread_.NET.Common.DTO.User;
 using Thread_.NET.DAL.Context;
 using Thread_.NET.DAL.Entities;
 
@@ -62,13 +65,54 @@ namespace Thread_.NET.BLL.Services
 
             var createdPost = await _context.Posts
                 .Include(post => post.Author)
-					.ThenInclude(author => author.Avatar)
+                    .ThenInclude(author => author.Avatar)
                 .FirstAsync(post => post.Id == postEntity.Id);
 
             var createdPostDTO = _mapper.Map<PostDTO>(createdPost);
             await _postHub.Clients.All.SendAsync("NewPost", createdPostDTO);
 
             return createdPostDTO;
+        }
+
+        public async Task DeletePost(int id)
+        {
+            var postEntity = _context.Posts.FirstOrDefault(post => post.Id == id);
+
+            if(postEntity == null)
+            {
+                throw new NotFoundException(nameof(Post), id);
+            }
+
+            _context.Posts.Remove(postEntity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePost(PostUpdateDto updateDto)
+        {
+            var postEntity = await GetPostByIdInternal(updateDto.PostId);
+
+            if (postEntity is null)
+            {
+                throw new NotFoundException(nameof(Post), updateDto.PostId);
+            }
+
+            var newPostEntity = _mapper.Map<Post>(updateDto);
+            var timeNow = DateTime.Now;
+
+            postEntity.Body = newPostEntity.Body;
+            postEntity.UpdatedAt = timeNow;
+            postEntity.Preview = newPostEntity.Preview;
+
+            _context.Posts.Update(postEntity);
+            await _context.SaveChangesAsync();
+        }
+
+
+        private async Task<Post> GetPostByIdInternal(int id)
+        {
+            return await _context.Posts
+                .Include(post => post.Preview)
+                .FirstOrDefaultAsync(post => post.Id == id);
         }
     }
 }

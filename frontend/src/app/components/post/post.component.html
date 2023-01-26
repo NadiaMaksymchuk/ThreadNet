@@ -3,7 +3,7 @@
     <img mat-card-avatar src="{{post.author.avatar}}" alt="Avatar">
     <mat-card-title>{{post.author.userName}}</mat-card-title>
     <div class="date">{{post.createdAt | date:'d/M/yy, h:mm a'}}</div>
-    <button class="menu-button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Icon-button with a menu">
+    <button class="menu-button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Icon-button with a menu" align="end">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
@@ -11,7 +11,7 @@
         <mat-icon>edit_square</mat-icon>
         <span>Edit</span>
       </button>
-      <button mat-menu-item>
+      <button mat-menu-item color="red">
         <mat-icon>close</mat-icon>
         <span>Remove</span>
       </button>
@@ -28,6 +28,9 @@
     </button>
     <button mat-icon-button color="accent">
       <mat-icon aria-label="Share">share</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon aria-label="Dislike">heart_broken</mat-icon>
     </button>
     <button mat-icon-button color="basic" (click)=" toggleComments()">
       <mat-icon matBadge="{{post.comments.length}}" matBadgeColor="warn" matBadgeSize="medium"

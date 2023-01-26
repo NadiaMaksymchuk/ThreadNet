@@ -6,5 +6,6 @@
         public User User { get; set; }
 
         public bool IsLike { get; set; }
+        public bool IsDislike { get; set; }
     }
 }

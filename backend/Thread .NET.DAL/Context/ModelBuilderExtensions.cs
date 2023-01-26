@@ -170,6 +170,7 @@ namespace Thread_.NET.DAL.Context
             var reactionsFake = new Faker<Reaction>()
                 .RuleFor(r => r.Id, f => reactionId++)
                 .RuleFor(r => r.IsLike, f => f.Random.Bool())
+                .RuleFor(r => r.IsDislike, f => f.Random.Bool())
                 .RuleFor(r => r.UserId, f => f.PickRandom(users).Id)
                 .RuleFor(pi => pi.CreatedAt, f => DateTime.Now)
                 .RuleFor(pi => pi.UpdatedAt, f => DateTime.Now);
@@ -184,6 +185,7 @@ namespace Thread_.NET.DAL.Context
             var postReactionsFake = new Faker<PostReaction>()
                 .RuleFor(pr => pr.Id, f => postReactionId++)
                 .RuleFor(cr => cr.IsLike, f => f.Random.Bool())
+                .RuleFor(r => r.IsDislike, f => f.Random.Bool())
                 .RuleFor(cr => cr.UserId, f => f.PickRandom(users).Id)
                 .RuleFor(pr => pr.PostId, f => f.PickRandom(posts).Id)
                 .RuleFor(pi => pi.CreatedAt, f => DateTime.Now)
@@ -199,6 +201,7 @@ namespace Thread_.NET.DAL.Context
             var commentReactionsFake = new Faker<CommentReaction>()
                 .RuleFor(cr => cr.Id, f => commentReactionId++)
                 .RuleFor(cr => cr.IsLike, f => f.Random.Bool())
+                .RuleFor(r => r.IsDislike, f => f.Random.Bool())
                 .RuleFor(cr => cr.UserId, f => f.PickRandom(users).Id)
                 .RuleFor(cr => cr.CommentId, f => f.PickRandom(comments).Id)
                 .RuleFor(pi => pi.CreatedAt, f => DateTime.Now)
