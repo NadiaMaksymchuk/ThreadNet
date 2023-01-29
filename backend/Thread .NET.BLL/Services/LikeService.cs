@@ -13,7 +13,8 @@ namespace Thread_.NET.BLL.Services
 
         public async Task LikePost(NewReactionDTO reaction)
         {
-            var likes = _context.PostReactions.Where(x => x.UserId == reaction.UserId && x.PostId == reaction.EntityId);
+            var likes = _context.PostReactions.Where(x => x.UserId == reaction.UserId && x.PostId == reaction.EntityId && x.IsLike == true);
+            var dislikes = _context.PostReactions.Where(x => x.UserId == reaction.UserId && x.PostId == reaction.EntityId && x.IsDislike == true);
 
             if (likes.Any())
             {
@@ -23,10 +24,16 @@ namespace Thread_.NET.BLL.Services
                 return;
             }
 
+            if (dislikes.Any())
+            {
+                _context.PostReactions.RemoveRange(dislikes);
+            }
+
             _context.PostReactions.Add(new DAL.Entities.PostReaction
             {
                 PostId = reaction.EntityId,
                 IsLike = reaction.IsLike,
+                IsDislike = reaction.IsDislike,
                 UserId = reaction.UserId
             });
 

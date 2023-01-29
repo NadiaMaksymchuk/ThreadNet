@@ -39,6 +39,11 @@ namespace Thread_.NET.BLL.Services
                 .OrderByDescending(post => post.CreatedAt)
                 .ToListAsync();
 
+            var count = await GetAllUsersThatLikePost(25);
+            var fklld = count.Count;
+            var t = await GetAllUsersThatDislikePost(25);
+            var tt = t.Count;
+
             return _mapper.Map<ICollection<PostDTO>>(posts);
         }
 
@@ -105,6 +110,26 @@ namespace Thread_.NET.BLL.Services
 
             _context.Posts.Update(postEntity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<UserDTO>> GetAllUsersThatLikePost(int postId)
+        {
+            var users = await _context.PostReactions
+                .Where(r => r.IsLike == true && r.PostId == postId)
+                .Select(u => u.User)
+                .ToListAsync();
+
+            return _mapper.Map<ICollection<UserDTO>>(users);
+        }
+
+        public async Task<ICollection<UserDTO>> GetAllUsersThatDislikePost(int postId)
+        {
+            var users = await _context.PostReactions
+                .Where(r => r.IsDislike == true && r.PostId == postId)
+                .Select(u => u.User)
+                .ToListAsync();
+
+            return _mapper.Map<ICollection<UserDTO>>(users);
         }
 
 

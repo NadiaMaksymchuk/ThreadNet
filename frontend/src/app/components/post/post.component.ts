@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Post } from '../../models/post/post';
 import { AuthenticationService } from '../../services/auth.service';
 import { AuthDialogService } from '../../services/auth-dialog.service';
@@ -11,18 +11,22 @@ import { User } from '../../models/user';
 import { Comment } from '../../models/comment/comment';
 import { catchError, switchMap, takeUntil } from 'rxjs/operators';
 import { SnackBarService } from '../../services/snack-bar.service';
+import { DislikeService } from 'src/app/services/dislike.service';
+import { PostService } from 'src/app/services/post.service';
 
 @Component({
     selector: 'app-post',
     templateUrl: './post.component.html',
     styleUrls: ['./post.component.sass']
 })
-export class PostComponent implements OnDestroy {
+export class PostComponent implements OnDestroy, OnInit {
     @Input() public post: Post;
     @Input() public currentUser: User;
 
     public showComments = false;
     public newComment = {} as NewComment;
+    public likeCount = 0;
+    public dislikeCount = 0;
 
     private unsubscribe$ = new Subject<void>();
 
@@ -30,9 +34,18 @@ export class PostComponent implements OnDestroy {
         private authService: AuthenticationService,
         private authDialogService: AuthDialogService,
         private likeService: LikeService,
+        private dislikeService: DislikeService,
         private commentService: CommentService,
-        private snackBarService: SnackBarService
-    ) {}
+        private snackBarService: SnackBarService,
+        private postService: PostService
+    ) { }
+
+    ngOnInit(): void {
+        this.likeCount = this.post.reactions.map(x => x.isLike === true).length;
+        this.dislikeCount = this.post.reactions.map(x => x.isDislike === true).length;
+        console.log(this.likeCount);
+        console.log(this.dislikeCount);
+    }
 
     public ngOnDestroy() {
         this.unsubscribe$.next();
@@ -69,6 +82,62 @@ export class PostComponent implements OnDestroy {
 
         this.likeService
             .likePost(this.post, this.currentUser)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((post) => (this.post = post));
+    }
+
+    public getAllLikes() {
+        let users: User[];
+        this.postService
+        .getUsersThatLikesPost(this.post.id)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+            (resp) => {
+                users = resp.body;
+                console.log(resp.body);
+                console.log(users);
+            }
+        );
+        if (users !== undefined) {
+            return users.length;
+        }
+        
+        return 0;
+    }
+
+    public getAllDislikes() {
+        let users: User[];
+        this.postService
+        .getUsersThatDislikesPost(this.post.id)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+            (resp) => {
+                users = resp.body;
+                console.log(resp.body);
+                console.log(users);
+            }
+        );
+        if (users !== undefined) {
+            return users.length;
+        }
+        
+        return 0;
+    }
+
+    public dislikePost() {
+        if (!this.currentUser) {
+            this.catchErrorWrapper(this.authService.getUser())
+                .pipe(
+                    switchMap((userResp) => this.dislikeService.dislikePost(this.post, userResp)),
+                    takeUntil(this.unsubscribe$)
+                )
+                .subscribe((post) => (this.post = post));
+
+            return;
+        }
+
+        this.dislikeService
+            .dislikePost(this.post, this.currentUser)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((post) => (this.post = post));
     }

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Thread_.NET.BLL.Services;
-using Thread_.NET.Common.DTO.Dislike;
 using Thread_.NET.Common.DTO.Like;
 using Thread_.NET.Common.DTO.Post;
+using Thread_.NET.Common.DTO.User;
 using Thread_.NET.Extensions;
 
 namespace Thread_.NET.WebAPI.Controllers
@@ -67,12 +67,24 @@ namespace Thread_.NET.WebAPI.Controllers
         }
 
         [HttpPost("dislike")]
-        public async Task<IActionResult> DislikePost(NewDislikeDto reaction)
+        public async Task<IActionResult> DislikePost(NewReactionDTO reaction)
         {
             reaction.UserId = this.GetUserIdFromToken();
 
             await _dislikeService.DislikePost(reaction);
             return Ok();
+        }
+
+        [HttpGet("likedThePost/{id}")]
+        public async Task<ActionResult<ICollection<UserDTO>>> GetUsersThatLikesPost(int id)
+        {
+            return Ok(await _postService.GetAllUsersThatLikePost(id));
+        }
+
+        [HttpGet("dislikedThePost/{id}")]
+        public async Task<ActionResult<ICollection<UserDTO>>> GetUsersThatDislikesPost(int id)
+        {
+            return Ok(await _postService.GetAllUsersThatDislikePost(id));
         }
     }
 }

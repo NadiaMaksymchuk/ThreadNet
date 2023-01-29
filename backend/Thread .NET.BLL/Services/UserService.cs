@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Thread_.NET.BLL.Exceptions;
 using Thread_.NET.BLL.Services.Abstract;

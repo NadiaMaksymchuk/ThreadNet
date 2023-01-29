@@ -17,6 +17,7 @@ export class LikeService {
         const reaction: NewReaction = {
             entityId: innerPost.id,
             isLike: true,
+            isDislike: false,
             userId: currentUser.id
         };
 
@@ -24,7 +25,7 @@ export class LikeService {
         let hasReaction = innerPost.reactions.some((x) => x.user.id === currentUser.id);
         innerPost.reactions = hasReaction
             ? innerPost.reactions.filter((x) => x.user.id !== currentUser.id)
-            : innerPost.reactions.concat({ isLike: true, user: currentUser });
+            : innerPost.reactions.concat({ isLike: true, isDislike: false, user: currentUser });
         hasReaction = innerPost.reactions.some((x) => x.user.id === currentUser.id);
 
         return this.postService.likePost(reaction).pipe(
@@ -33,7 +34,7 @@ export class LikeService {
                 // revert current array changes in case of any error
                 innerPost.reactions = hasReaction
                     ? innerPost.reactions.filter((x) => x.user.id !== currentUser.id)
-                    : innerPost.reactions.concat({ isLike: true, user: currentUser });
+                    : innerPost.reactions.concat({ isLike: true, isDislike: false, user: currentUser });
 
                 return of(innerPost);
             })
