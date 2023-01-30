@@ -6,6 +6,8 @@ import { PostService } from './post.service';
 import { User } from '../models/user';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import {merge} from 'rxjs';
+import { MaterialComponentsModule } from '../components/common/material-components.module';
 
 @Injectable({ providedIn: 'root' })
 export class LikeService {
@@ -20,13 +22,18 @@ export class LikeService {
             isDislike: false,
             userId: currentUser.id
         };
-
-        // update current array instantly
         let hasReaction = innerPost.reactions.some((x) => x.user.id === currentUser.id);
-        innerPost.reactions = hasReaction
-            ? innerPost.reactions.filter((x) => x.user.id !== currentUser.id)
-            : innerPost.reactions.concat({ isLike: true, isDislike: false, user: currentUser });
-        hasReaction = innerPost.reactions.some((x) => x.user.id === currentUser.id);
+
+        if(innerPost.reactions.some((x) => x.user.id === currentUser.id && x.isDislike == false && x.isLike == true)) {
+            innerPost.reactions = innerPost.reactions.filter((x) => x.user.id !== currentUser.id).concat({ isLike: false, isDislike: false, user: currentUser });
+        }
+        else {
+            innerPost.reactions = hasReaction
+                ? innerPost.reactions.filter((x) => x.user.id !== currentUser.id).concat({ isLike: true, isDislike: false, user: currentUser })
+                : innerPost.reactions.concat({ isLike: true, isDislike: false, user: currentUser });
+        }
+
+        //hasReaction = innerPost.reactions.some((x) => x.user.id === currentUser.id);
 
         return this.postService.likePost(reaction).pipe(
             map(() => innerPost),

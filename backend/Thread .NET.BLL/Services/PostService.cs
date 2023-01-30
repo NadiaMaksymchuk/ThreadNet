@@ -39,11 +39,6 @@ namespace Thread_.NET.BLL.Services
                 .OrderByDescending(post => post.CreatedAt)
                 .ToListAsync();
 
-            var count = await GetAllUsersThatLikePost(25);
-            var fklld = count.Count;
-            var t = await GetAllUsersThatDislikePost(25);
-            var tt = t.Count;
-
             return _mapper.Map<ICollection<PostDTO>>(posts);
         }
 
@@ -81,14 +76,15 @@ namespace Thread_.NET.BLL.Services
 
         public async Task DeletePost(int id)
         {
-            var postEntity = _context.Posts.FirstOrDefault(post => post.Id == id);
+            var postReaction = await _context.PostReactions.FirstOrDefaultAsync(x => x.PostId == id);
 
-            if(postEntity == null)
+            if(postReaction is not null)
             {
-                throw new NotFoundException(nameof(Post), id);
-            }
-
-            _context.Posts.Remove(postEntity);
+                _context.PostReactions.RemoveRange(postReaction);
+            }    
+            var post = await _context.Posts.FirstOrDefaultAsync(x => x.Id == id);
+ 
+            _context.Posts.RemoveRange(post);
             await _context.SaveChangesAsync();
         }
 
@@ -137,6 +133,9 @@ namespace Thread_.NET.BLL.Services
         {
             return await _context.Posts
                 .Include(post => post.Preview)
+                .Include(post => post.Reactions)
+                .Include(post => post.Comments)
+                    .ThenInclude(comment => comment.Reactions)
                 .FirstOrDefaultAsync(post => post.Id == id);
         }
     }

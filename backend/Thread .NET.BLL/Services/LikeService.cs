@@ -14,7 +14,7 @@ namespace Thread_.NET.BLL.Services
         public async Task LikePost(NewReactionDTO reaction)
         {
             var likes = _context.PostReactions.Where(x => x.UserId == reaction.UserId && x.PostId == reaction.EntityId && x.IsLike == true);
-            var dislikes = _context.PostReactions.Where(x => x.UserId == reaction.UserId && x.PostId == reaction.EntityId && x.IsDislike == true);
+            var dislikes = _context.PostReactions.Where(x => x.UserId == reaction.UserId && x.PostId == reaction.EntityId);
 
             if (likes.Any())
             {

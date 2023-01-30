@@ -50,7 +50,7 @@ namespace Thread_.NET.WebAPI.Controllers
             return Ok();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
             await _postService.DeletePost(id);

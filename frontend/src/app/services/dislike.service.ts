@@ -25,10 +25,16 @@ export class DislikeService {
     };
 
     let hasReaction = innerPost.reactions.some((x) => x.user.id === currentUser.id);
-        innerPost.reactions = hasReaction
-            ? innerPost.reactions.filter((x) => x.user.id !== currentUser.id)
-            : innerPost.reactions.concat({ isDislike: true, isLike: false, user: currentUser });
-        hasReaction = innerPost.reactions.some((x) => x.user.id === currentUser.id);
+    if(innerPost.reactions.some((x) => x.user.id === currentUser.id && x.isLike == false && x.isDislike == true)) {
+      innerPost.reactions = innerPost.reactions.filter((x) => x.user.id !== currentUser.id).concat({ isLike: false, isDislike: false, user: currentUser });
+    }
+    else {
+      innerPost.reactions = hasReaction
+      ? innerPost.reactions.filter((x) => x.user.id !== currentUser.id).concat({ isDislike: true, isLike: false, user: currentUser })
+      : innerPost.reactions.concat({ isDislike: true, isLike: false, user: currentUser });
+    }
+       
+    //hasReaction = innerPost.reactions.some((x) => x.user.id === currentUser.id);
 
     return this.postService.dislikePost(reaction).pipe(
       map(() => innerPost),
@@ -36,7 +42,7 @@ export class DislikeService {
           // revert current array changes in case of any error
           innerPost.reactions = hasReaction
               ? innerPost.reactions.filter((x) => x.user.id !== currentUser.id)
-              : innerPost.reactions.concat({ isLike: false, isDislike: true, user: currentUser });
+              : innerPost.reactions.concat({ isDislike: true, isLike: false,  user: currentUser });
 
           return of(innerPost);
       })

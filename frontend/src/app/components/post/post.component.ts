@@ -12,21 +12,21 @@ import { Comment } from '../../models/comment/comment';
 import { catchError, switchMap, takeUntil } from 'rxjs/operators';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { DislikeService } from 'src/app/services/dislike.service';
+import { ChangeDetectionStrategy } from "@angular/core";
 import { PostService } from 'src/app/services/post.service';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-post',
     templateUrl: './post.component.html',
     styleUrls: ['./post.component.sass']
 })
-export class PostComponent implements OnDestroy, OnInit {
+export class PostComponent implements OnDestroy {
     @Input() public post: Post;
     @Input() public currentUser: User;
 
     public showComments = false;
     public newComment = {} as NewComment;
-    public likeCount = 0;
-    public dislikeCount = 0;
 
     private unsubscribe$ = new Subject<void>();
 
@@ -40,11 +40,12 @@ export class PostComponent implements OnDestroy, OnInit {
         private postService: PostService
     ) { }
 
-    ngOnInit(): void {
-        this.likeCount = this.post.reactions.map(x => x.isLike === true).length;
-        this.dislikeCount = this.post.reactions.map(x => x.isDislike === true).length;
-        console.log(this.likeCount);
-        console.log(this.dislikeCount);
+    public GetLikeCount() {
+        return this.post.reactions.filter(x => x.isLike === true).length;
+    }
+
+    public GetDislikeCount() {
+        return this.post.reactions.filter(x => x.isDislike === true).length;
     }
 
     public ngOnDestroy() {
@@ -75,7 +76,9 @@ export class PostComponent implements OnDestroy, OnInit {
                     switchMap((userResp) => this.likeService.likePost(this.post, userResp)),
                     takeUntil(this.unsubscribe$)
                 )
-                .subscribe((post) => (this.post = post));
+                .subscribe((post) => (
+                    this.post = post
+            ));
 
             return;
         }
@@ -83,45 +86,7 @@ export class PostComponent implements OnDestroy, OnInit {
         this.likeService
             .likePost(this.post, this.currentUser)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((post) => (this.post = post));
-    }
-
-    public getAllLikes() {
-        let users: User[];
-        this.postService
-        .getUsersThatLikesPost(this.post.id)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-            (resp) => {
-                users = resp.body;
-                console.log(resp.body);
-                console.log(users);
-            }
-        );
-        if (users !== undefined) {
-            return users.length;
-        }
-        
-        return 0;
-    }
-
-    public getAllDislikes() {
-        let users: User[];
-        this.postService
-        .getUsersThatDislikesPost(this.post.id)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(
-            (resp) => {
-                users = resp.body;
-                console.log(resp.body);
-                console.log(users);
-            }
-        );
-        if (users !== undefined) {
-            return users.length;
-        }
-        
-        return 0;
+            .subscribe((post) => ( this.post = post));
     }
 
     public dislikePost() {
@@ -131,8 +96,9 @@ export class PostComponent implements OnDestroy, OnInit {
                     switchMap((userResp) => this.dislikeService.dislikePost(this.post, userResp)),
                     takeUntil(this.unsubscribe$)
                 )
-                .subscribe((post) => (this.post = post));
-
+                .subscribe((post) => (
+                    this.post = post
+            ));
             return;
         }
 
@@ -140,6 +106,13 @@ export class PostComponent implements OnDestroy, OnInit {
             .dislikePost(this.post, this.currentUser)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((post) => (this.post = post));
+    }
+
+    public removePost() {
+        this.postService
+        .deletePost(this.post)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((post: any) => (this.post = post));
     }
 
     public sendComment() {

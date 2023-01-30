@@ -4,6 +4,7 @@ import { Post } from '../models/post/post';
 import { NewReaction } from '../models/reactions/newReaction';
 import { NewPost } from '../models/post/new-post';
 import { User } from '../models/user';
+import { catchError, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
@@ -27,11 +28,14 @@ export class PostService {
         return this.httpService.postFullRequest<Post>(`${this.routePrefix}/dislike`, reaction);
     }
 
-    public getUsersThatLikesPost(id: number) {
-        return this.httpService.getFullRequest<User[]>(`${this.routePrefix}/likedThePost/${id}`);
+    public delete(id: number) {
+        return this.httpService.deleteRequest(`${this.routePrefix}/${id}`);
     }
 
-    public getUsersThatDislikesPost(id: number) {
-        return this.httpService.getFullRequest<User[]>(`${this.routePrefix}/dislikedThePost/${id}`);
+    public deletePost(post: Post) {
+
+        return this.delete(post.id).pipe(
+            map((post) => post=null)
+        )
     }
 }

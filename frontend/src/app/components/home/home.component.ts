@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { DialogType } from '../../models/common/auth-dialog-type';
 import { User } from '../../models/user';
 import { Subject } from 'rxjs';
