@@ -170,7 +170,7 @@ export class MainThreadComponent implements OnInit, OnDestroy {
             .subscribe((user) => (this.currentUser = user));
     }
 
-    private sortPostArray(array: Post[]): Post[] {
+    public sortPostArray(array: Post[]): Post[] {
         return array.sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
     }
 }

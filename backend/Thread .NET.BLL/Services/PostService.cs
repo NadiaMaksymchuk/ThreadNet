@@ -88,7 +88,7 @@ namespace Thread_.NET.BLL.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdatePost(PostUpdateDto updateDto)
+        public async Task<PostDTO> UpdatePost(PostUpdateDto updateDto)
         {
             var postEntity = await GetPostByIdInternal(updateDto.PostId);
 
@@ -106,6 +106,10 @@ namespace Thread_.NET.BLL.Services
 
             _context.Posts.Update(postEntity);
             await _context.SaveChangesAsync();
+
+            var updatePostDTO = _mapper.Map<PostDTO>(postEntity);
+
+            return updatePostDTO;
         }
 
         public async Task<ICollection<UserDTO>> GetAllUsersThatLikePost(int postId)
@@ -132,10 +136,15 @@ namespace Thread_.NET.BLL.Services
         private async Task<Post> GetPostByIdInternal(int id)
         {
             return await _context.Posts
+                .Include(post => post.Author)
+                    .ThenInclude(author => author.Avatar)
                 .Include(post => post.Preview)
                 .Include(post => post.Reactions)
+                    .ThenInclude(reaction => reaction.User)
                 .Include(post => post.Comments)
                     .ThenInclude(comment => comment.Reactions)
+                .Include(post => post.Comments)
+                    .ThenInclude(comment => comment.Author)
                 .FirstOrDefaultAsync(post => post.Id == id);
         }
     }

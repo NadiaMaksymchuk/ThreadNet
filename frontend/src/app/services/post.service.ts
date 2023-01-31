@@ -5,6 +5,7 @@ import { NewReaction } from '../models/reactions/newReaction';
 import { NewPost } from '../models/post/new-post';
 import { User } from '../models/user';
 import { catchError, map } from 'rxjs';
+import { UpdatePost } from '../models/post/update-post';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
@@ -18,6 +19,10 @@ export class PostService {
 
     public createPost(post: NewPost) {
         return this.httpService.postFullRequest<Post>(`${this.routePrefix}`, post);
+    }
+
+    public updatePost(post: UpdatePost) {
+        return this.httpService.putFullRequest<Post>(`${this.routePrefix}`, post);
     }
 
     public likePost(reaction: NewReaction) {

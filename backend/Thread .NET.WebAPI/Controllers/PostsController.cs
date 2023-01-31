@@ -42,12 +42,11 @@ namespace Thread_.NET.WebAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdatePost([FromBody] PostUpdateDto dto)
+        public async Task<ActionResult<PostDTO>> UpdatePost([FromBody] PostUpdateDto dto)
         {
             dto.AuthorId = this.GetUserIdFromToken();
 
-            await _postService.UpdatePost(dto);
-            return Ok();
+            return Ok(await _postService.UpdatePost(dto));
         }
 
         [HttpDelete("{id}")]
