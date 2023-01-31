@@ -33,14 +33,7 @@ export class PostService {
         return this.httpService.postFullRequest<Post>(`${this.routePrefix}/dislike`, reaction);
     }
 
-    public delete(id: number) {
+    public deletePost(id: number) {
         return this.httpService.deleteRequest(`${this.routePrefix}/${id}`);
-    }
-
-    public deletePost(post: Post) {
-
-        return this.delete(post.id).pipe(
-            map((post) => post=null)
-        )
     }
 }

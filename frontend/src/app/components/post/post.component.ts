@@ -166,9 +166,12 @@ export class PostComponent implements OnDestroy, OnInit {
 
     public removePost() {
         this.postService
-        .deletePost(this.post)
+        .deletePost(this.post.id)
         .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((post: any) => (this.post = post));
+        .subscribe(() => {
+            this.post = null;
+        },
+        (error) => this.snackBarService.showErrorMessage(error));
     }
 
     public sendComment() {
