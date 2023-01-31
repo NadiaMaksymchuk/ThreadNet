@@ -4,8 +4,8 @@
       <textarea [(ngModel)]="updatePost.body" matInput placeholder="Write something..."></textarea>
     </mat-form-field>
     <div class="image-container">
-      <mat-icon aria-label="Send" (click)="mainThreadComponent.removeImage()">close</mat-icon>
-      <img mat-card-image class="post-image" *ngIf="mainThreadComponent.imageUrl" mat-card-image src="{{mainThreadComponent.imageUrl}}" alt="Photo">
+      <mat-icon aria-label="Send" (click)="removeImage()">close</mat-icon>
+      <img mat-card-image class="post-image" *ngIf="imageUpdateURL" mat-card-image src="{{imageUpdateURL}}" alt="Photo">
     </div>
   </mat-card-content>
   <mat-card-actions align="end">

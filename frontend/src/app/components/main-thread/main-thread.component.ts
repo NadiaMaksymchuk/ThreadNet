@@ -99,6 +99,8 @@ export class MainThreadComponent implements OnInit, OnDestroy {
             },
             (error) => this.snackBarService.showErrorMessage(error)
         );
+
+        console.log(this.imageUrl);
     }
 
     public loadImage(target: any) {
@@ -155,6 +157,7 @@ export class MainThreadComponent implements OnInit, OnDestroy {
     }
 
     public addNewPost(newPost: Post) {
+
         if (!this.cachedPosts.some((x) => x.id === newPost.id)) {
             this.cachedPosts = this.sortPostArray(this.cachedPosts.concat(newPost));
             if (!this.isOnlyMine || (this.isOnlyMine && newPost.author.id === this.currentUser.id)) {

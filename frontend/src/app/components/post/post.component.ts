@@ -19,7 +19,6 @@ import { MainThreadComponent } from '../main-thread/main-thread.component';
 import { GyazoService } from 'src/app/services/gyazo.service';
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'app-post',
     templateUrl: './post.component.html',
     styleUrls: ['./post.component.sass']
@@ -27,6 +26,7 @@ import { GyazoService } from 'src/app/services/gyazo.service';
 export class PostComponent implements OnDestroy, OnInit {
     @Input() public post: Post;
     @Input() public currentUser: User;
+    @Input() public imageUpdateURL: string;
     
     public updatePost= {} as UpdatePost;
     public update = false;
@@ -122,9 +122,13 @@ export class PostComponent implements OnDestroy, OnInit {
 
     public putPost() {
         this.updatePost.postId = this.post.id;
-        this.post.previewImage = this.mainThreadComponent.imageUrl;
+        this.updatePost.previewImage = this.imageUpdateURL;
 
-        const postSubscription = !this.mainThreadComponent.imageFile
+        if(this.imageUpdateURL === undefined) {
+            this.updatePost.previewImage = '';
+        }
+
+        const postSubscription = !this.imageUpdateURL
             ? this.postService.updatePost(this.updatePost)
             : this.gyazoService.uploadImage(this.mainThreadComponent.imageFile).pipe(
                 switchMap((imageData) => {
@@ -148,8 +152,13 @@ export class PostComponent implements OnDestroy, OnInit {
         );
     }
 
+    public removeImage() {
+        this.imageUpdateURL = undefined;
+        this.mainThreadComponent.imageFile = undefined;
+    }
+
     public updateThisPost() {
-        this.mainThreadComponent.imageUrl = this.post.previewImage;
+        this.imageUpdateURL = this.post.previewImage;
         this.updatePost.body = this.post.body;
         this.updatePost.previewImage = this.post.previewImage;
         this.update = !this.update;
