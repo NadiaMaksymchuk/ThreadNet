@@ -43,7 +43,7 @@ export class MainThreadComponent implements OnInit, OnDestroy {
         private postService: PostService,
         private gyazoService: GyazoService,
         private authDialogService: AuthDialogService,
-        private eventService: EventService
+        private eventService: EventService,
     ) { }
 
     public ngOnDestroy() {
@@ -133,6 +133,14 @@ export class MainThreadComponent implements OnInit, OnDestroy {
             this.posts = this.cachedPosts.filter((x) => x.author.id === this.currentUser.id);
         } else {
             this.isOnlyMine = false;
+            this.posts = this.cachedPosts;
+        }
+    }
+
+    public sliderILiked(event: MatSlideToggleChange) {
+        if (event.checked) {
+            this.posts = this.cachedPosts.filter((x) => x.reactions.some(r => r.user.id === this.currentUser.id && r.isLike === true));
+        } else {
             this.posts = this.cachedPosts;
         }
     }
