@@ -1,0 +1,6 @@
+<h1 mat-dialog-title>Reactions <mat-icon class="close-icon" (click)="onNoClick()">close</mat-icon></h1>
+<mat-list role="list" *ngFor="let _reaction of data">
+    <mat-list-item role="listitem">
+        <img mat-card-avatar src="{{_reaction.user.avatar}}" alt="Avatar" class="user-img">
+        {{_reaction.user.userName}}</mat-list-item>
+</mat-list>

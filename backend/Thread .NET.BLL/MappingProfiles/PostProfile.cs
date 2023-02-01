@@ -14,7 +14,8 @@ namespace Thread_.NET.BLL.MappingProfiles
             CreateMap<PostCreateDTO, Post>()
                 .ForMember(dest => dest.Preview, src => src.MapFrom(s => string.IsNullOrEmpty(s.PreviewImage) ? null : new Image { URL = s.PreviewImage }));
 
-            CreateMap<PostUpdateDto, Post>();
+            CreateMap<PostUpdateDto, Post>()
+                .ForMember(dest => dest.Preview, src => src.MapFrom(s => string.IsNullOrEmpty(s.PreviewImage) ? null : new Image { URL = s.PreviewImage }));
         }
     }
 }

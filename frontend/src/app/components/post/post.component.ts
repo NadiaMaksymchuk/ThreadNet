@@ -17,6 +17,9 @@ import { PostService } from 'src/app/services/post.service';
 import { UpdatePost } from 'src/app/models/post/update-post';
 import { MainThreadComponent } from '../main-thread/main-thread.component';
 import { GyazoService } from 'src/app/services/gyazo.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ShowReactionsDialogComponent } from '../show-reactions-dialog/show-reactions-dialog.component';
+import { Reaction } from 'src/app/models/reactions/reaction';
 
 @Component({
     selector: 'app-post',
@@ -45,7 +48,8 @@ export class PostComponent implements OnDestroy, OnInit {
         private snackBarService: SnackBarService,
         private postService: PostService,
         private mainThread: MainThreadComponent,
-        private gyazoService: GyazoService
+        private gyazoService: GyazoService,
+        public dialog: MatDialog
     ) { }
 
     ngOnInit() {
@@ -80,6 +84,27 @@ export class PostComponent implements OnDestroy, OnInit {
 
         this.showComments = !this.showComments;
     }
+
+    openDialog(route: string): void {
+        let reactions: Reaction[] = [];
+
+        if(route == 'like') {
+            reactions = this.post.reactions.filter(x => x.isLike === true);
+        }
+        
+        if(route == 'dislike') {
+            reactions = this.post.reactions.filter(x => x.isDislike === true);
+        }
+
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.autoFocus = false;
+        dialogConfig.maxHeight = '90vh';
+
+        dialogConfig.data = reactions;
+
+        this.dialog.open(ShowReactionsDialogComponent, dialogConfig);
+      }
 
     public likePost() {
         if (!this.currentUser) {
@@ -123,17 +148,12 @@ export class PostComponent implements OnDestroy, OnInit {
     public putPost() {
         this.updatePost.postId = this.post.id;
         this.updatePost.previewImage = this.imageUpdateURL;
-
-        if(this.imageUpdateURL === undefined) {
-            this.updatePost.previewImage = '';
-        }
-
+        
         const postSubscription = !this.imageUpdateURL
             ? this.postService.updatePost(this.updatePost)
             : this.gyazoService.uploadImage(this.mainThreadComponent.imageFile).pipe(
                 switchMap((imageData) => {
                     this.updatePost.previewImage = imageData.url;
-                    console.log(imageData.url)
                     return this.postService.updatePost(this.updatePost);
                 })
             );

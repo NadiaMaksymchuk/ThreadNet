@@ -28,21 +28,34 @@
       <mat-card-title>{{post.author.userName}}</mat-card-title>
       <div class="date">{{post.createdAt | date:'d/M/yy, h:mm a'}}</div>
       <span class="header-spacer"></span>
-      <div *ngIf="currentUser !== undefined && currentUser.id === post.author.id">
         <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Icon-button with a menu">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="updateThisPost()">
-            <mat-icon>edit_square</mat-icon>
-            <span>Edit</span>
-          </button>
-          <button mat-menu-item (click)="removePost()">
-            <mat-icon сolor="red">close</mat-icon>
-            <span>Remove</span>
-          </button>
+          <div *ngIf="currentUser !== undefined && currentUser.id === post.author.id">
+            <button mat-menu-item (click)="updateThisPost()">
+              <mat-icon>edit_square</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item (click)="removePost()">
+              <mat-icon сolor="red">close</mat-icon>
+              <span>Remove</span>
+            </button>
+          </div>
+          <div *ngIf="GetLikeCount() !== 0">
+            <button mat-menu-item (click)="openDialog('like')">
+              <mat-icon>favorite_border</mat-icon>
+              <span>Show likes</span>
+            </button>
+          </div>
+          <div *ngIf="GetDislikeCount() !== 0">
+            <button mat-menu-item (click)="openDialog('dislike')">
+              <mat-icon>heart_broken</mat-icon>
+              <span>Show dislikes</span>
+            </button>
+        </div>
         </mat-menu>
-      </div>
+      
     </mat-card-header>
     <img mat-card-image *ngIf="post.previewImage" mat-card-image src="{{post.previewImage}}" alt="Photo">
     <mat-card-content>

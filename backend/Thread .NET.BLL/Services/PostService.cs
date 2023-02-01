@@ -104,12 +104,6 @@ namespace Thread_.NET.BLL.Services
             postEntity.UpdatedAt = timeNow;
             postEntity.Preview = newPostEntity.Preview;
 
-            if(updateDto.PreviewImage is null)
-            {
-                postEntity.Preview = null;
-                postEntity.PreviewId = null;
-            }
-
             _context.Posts.Update(postEntity);
             await _context.SaveChangesAsync();
 
