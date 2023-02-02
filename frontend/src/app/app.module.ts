@@ -17,6 +17,9 @@ import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.compon
 import { CommentComponent } from './components/comment/comment.component';
 import { MaterialComponentsModule } from './components/common/material-components.module';
 import { ShowReactionsDialogComponent } from './components/show-reactions-dialog/show-reactions-dialog.component';
+import { Toastr, TOASTR_TOKEN } from './services/toastr.service';
+
+declare const toastr: Toastr;
 
 @NgModule({
     declarations: [AppComponent, MainThreadComponent, PostComponent, HomeComponent, UserProfileComponent, AuthDialogComponent, CommentComponent, ShowReactionsDialogComponent],
@@ -24,7 +27,8 @@ import { ShowReactionsDialogComponent } from './components/show-reactions-dialog
     exports: [MaterialComponentsModule],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        { provide: TOASTR_TOKEN, useValue: toastr }
     ],
     bootstrap: [AppComponent]
 })

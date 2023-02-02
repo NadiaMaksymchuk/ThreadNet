@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Post } from '../../models/post/post';
 import { User } from '../../models/user';
 import { Subject } from 'rxjs';
@@ -14,6 +14,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { environment } from 'src/environments/environment';
 import { GyazoService } from 'src/app/services/gyazo.service';
+import { TOASTR_TOKEN, Toastr } from 'src/app/services/toastr.service';
 
 @Component({
     selector: 'app-main-thread',
@@ -44,6 +45,7 @@ export class MainThreadComponent implements OnInit, OnDestroy {
         private gyazoService: GyazoService,
         private authDialogService: AuthDialogService,
         private eventService: EventService,
+        @Inject(TOASTR_TOKEN) private toastr: Toastr
     ) { }
 
     public ngOnDestroy() {
@@ -96,6 +98,7 @@ export class MainThreadComponent implements OnInit, OnDestroy {
                 this.post.body = undefined;
                 this.post.previewImage = undefined;
                 this.loading = false;
+                this.toastr.success("Added", "Success");
             },
             (error) => this.snackBarService.showErrorMessage(error)
         );
