@@ -31,6 +31,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -65,7 +66,8 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatSnackBarModule,
         MatSliderModule,
         MatSlideToggleModule,
-        MatSortModule
+        MatSortModule,
+        ReactiveFormsModule
     ],
     exports: [
         MatToolbarModule,

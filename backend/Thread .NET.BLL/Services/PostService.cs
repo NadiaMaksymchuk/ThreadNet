@@ -112,27 +112,6 @@ namespace Thread_.NET.BLL.Services
             return updatePostDTO;
         }
 
-        public async Task<ICollection<UserDTO>> GetAllUsersThatLikePost(int postId)
-        {
-            var users = await _context.PostReactions
-                .Where(r => r.IsLike == true && r.PostId == postId)
-                .Select(u => u.User)
-                .ToListAsync();
-
-            return _mapper.Map<ICollection<UserDTO>>(users);
-        }
-
-        public async Task<ICollection<UserDTO>> GetAllUsersThatDislikePost(int postId)
-        {
-            var users = await _context.PostReactions
-                .Where(r => r.IsDislike == true && r.PostId == postId)
-                .Select(u => u.User)
-                .ToListAsync();
-
-            return _mapper.Map<ICollection<UserDTO>>(users);
-        }
-
-
         private async Task<Post> GetPostByIdInternal(int id)
         {
             return await _context.Posts

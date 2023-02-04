@@ -2,15 +2,42 @@
 <div mat-dialog-content>
   <form name="authForm" #authForm="ngForm" class="main-content">
     <mat-form-field>
-      <input name="authEmail" [(ngModel)]="email" #inEmail="ngModel" matInput placeholder="Email">
+      <input name="authEmail" [(ngModel)]="email" #inEmail="ngModel" matInput placeholder="Email"
+      [ngClass]="{ 'is-invalid': submitted && f['email'].errors }">
+      <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+        <div *ngIf="f['email'].errors['required']">Email is required</div>
+        <div *ngIf="f['email'].errors['email']">Email is invalid</div>
+      </div>
     </mat-form-field>
+
     <mat-form-field *ngIf="data.dialogType === dialogType.SignUp">
-      <input name="authUserName" [(ngModel)]="userName" #upNickname="ngModel" matInput placeholder="Username">
+      <input name="authUserName" [(ngModel)]="userName" #upNickname="ngModel" matInput placeholder="Username"
+      [ngClass]="{ 'is-invalid': submitted && f['userName'].errors }">
+      <div *ngIf="submitted && f['userName'].invalid" class="invalid-feedback">
+        <div *ngIf="f['userName'].errors['required']">Username is required</div>
+        <div *ngIf="f['userName'].errors.minlength ">
+          Username must be at least 3 characters
+        </div>
+        <div *ngIf="f['userName'].errors['maxlength']">
+          Username must not exceed 20 characters
+        </div>
+      </div>
     </mat-form-field>
+
     <mat-form-field>
       <input name="authPassword" [(ngModel)]="password" #upPassword="ngModel" matInput
-        [type]="hidePass ? 'password' : 'text'" placeholder="Password">
+        [type]="hidePass ? 'password' : 'text'" placeholder="Password"
+        [ngClass]="{ 'is-invalid': submitted && f['password'].errors }">
       <mat-icon matSuffix (click)="hidePass = !hidePass">{{hidePass ? 'visibility' : 'visibility_off'}}</mat-icon>
+      <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+        <div *ngIf="f['password'].errors['required']">Password is required</div>
+        <div *ngIf="f['password'].errors['minlength']">
+          Password must be at least 6 characters
+        </div>
+        <div *ngIf="f['password'].errors['maxlength']">
+          Username must not exceed 40 characters
+        </div>
+      </div>
     </mat-form-field>
   </form>
 </div>

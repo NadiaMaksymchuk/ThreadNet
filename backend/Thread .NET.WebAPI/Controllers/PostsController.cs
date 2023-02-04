@@ -73,17 +73,5 @@ namespace Thread_.NET.WebAPI.Controllers
             await _dislikeService.DislikePost(reaction);
             return Ok();
         }
-
-        [HttpGet("likedThePost/{id}")]
-        public async Task<ActionResult<ICollection<UserDTO>>> GetUsersThatLikesPost(int id)
-        {
-            return Ok(await _postService.GetAllUsersThatLikePost(id));
-        }
-
-        [HttpGet("dislikedThePost/{id}")]
-        public async Task<ActionResult<ICollection<UserDTO>>> GetUsersThatDislikesPost(int id)
-        {
-            return Ok(await _postService.GetAllUsersThatDislikePost(id));
-        }
     }
 }
