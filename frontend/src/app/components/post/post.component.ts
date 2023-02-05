@@ -216,7 +216,7 @@ export class PostComponent implements OnDestroy, OnInit {
         this.authDialogService.openAuthDialog(DialogType.SignIn);
     }
 
-    private catchErrorWrapper(obs: Observable<User>) {
+    public catchErrorWrapper(obs: Observable<User>) {
         return obs.pipe(
             catchError(() => {
                 this.openAuthDialog();

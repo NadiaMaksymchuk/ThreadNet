@@ -28,7 +28,7 @@
       <mat-card-title>{{post.author.userName}}</mat-card-title>
       <div class="date">{{post.createdAt | date:'d/M/yy, h:mm a'}}</div>
       <span class="header-spacer"></span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Icon-button with a menu">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Icon-button with a menu" *ngIf="currentUser !== undefined && (currentUser.id === post.author.id || GetLikeCount() !== 0 || GetDislikeCount() !== 0)">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
