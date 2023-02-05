@@ -11,6 +11,7 @@ namespace Thread_.NET.BLL.MappingProfiles
             CreateMap<Comment, CommentDTO>();
 
             CreateMap<NewCommentDTO, Comment>();
+            CreateMap<UpdateCommentDto, Comment>();
         }
     }
 }

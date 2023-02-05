@@ -53,7 +53,7 @@ namespace Thread_.NET.BLL.Services
 
             if (updatedComment is null)
             {
-                throw new NotFoundException(nameof(Comment), updateDto.PostId);
+                throw new NotFoundException(nameof(Comment), updateDto.CommentId);
             }
 
             var newCommentEntity = _mapper.Map<Comment>(updateDto);
