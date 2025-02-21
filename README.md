@@ -1,37 +1,10 @@
 # Thread .NET - mini-project Thread
 
-### Stage description
-
-This stage is dedicated to self-study. We present you with a small project with select technologies and some basic functionality. This project should be enough for you to become familiar with and see how all parts of the application work together. The main goals of this stage are to give you an understanding of design patterns, data processing algorithms, conventions of writing and structuring backend/frontend code, and finally application architecture as a whole. There is no need for you to have a deep and extensive knowledge of each technology that is used in a project, however, it is important to get a general idea of how a modern web application is built and what tools can help you achieve this. You will be exploring the structure of a web app, libraries, and code as well as extending existing functionality by completing several tasks which vary in complexity for several weeks.
-
 ### Project description
 
 **Thread** is a specially prepared template of a client-server application, in which the client is a Single Page Application ([SPA](https://en.wikipedia.org/wiki/Single-page_application)) and the backend is a web service. The project has basic architecture, aimed at future extension. Modern libraries and frameworks are used for solving ordinary problems
 
 The theme of the project is a social network similar to Twitter.
-
-The main idea of this project is to see how a real project should look like, understand how project architecture is designed, take a look at possible configurations of this project and read and understand someone else’s code.
-
-Functionality:
-
-* Registration
-
-* Twit creation
-
-* Twit commenting
-
-* Updating user profile
-
-### Expectations from students
-
-Your understanding of the project and its components will be the determining factor of how far you’ve advanced in your learning. A task will be considered complete if its functionality has been implemented in full and the feature is working as expected. We will also look at its implementation and evaluate the resulting code, making sure that the code quality and structuring are as expected. It will show us how well you do understand the architecture of the project. By the end, everyone will get personal feedback and a grade. This feedback can help you determine your weaker sides and understand where you should pay more attention in the following lectures. The maximum number of points for this mini-project work is 10. If you enrol in our academy, these points will be added to your total grade, which also includes your grade for lectures of the theoretical stage and will be your upper edge in the top students' leaderboard.
-
-### In the following sections, you can find
-
-- information, that can help you to understand the project better;
-- installation and startup instructions;
-- tasks, that have to be done.
-
 
 ### Technologies:
 
@@ -97,7 +70,7 @@ git clone https://github.com/BinaryStudioAcademy/thread-net.git
 
 **Important**: Proejct development should take place on [Bitbucket](https://bitbucket.org/).
 
-It's necessary to add and implement the following functionality:
+Now the project has the following functionality:
 
 1. Editing/Removing your posts.
 2. Dislikes for posts.
@@ -110,10 +83,5 @@ It's necessary to add and implement the following functionality:
 9. Extend validation (backend/frontend) at your discretion. For example, users shouldn't be able to save invalid emails.
 10. Add a filter - show only posts, which I (as a user) liked.
 11. Add the ability to reset your password. Send an email with a link to the reset password page.
-> **P.S. - In this task, you shouldn't commit your SMTP data to the repository.**
 12. Send an email to a user, when someone liked their post.
 13. Share a post by email.
-### P.S.
-The whole list of tasks can be found on [**Trello board**](https://trello.com/b/UNOXNqSm "**Trello**") in a 'Backlog Students' column. The board should be copied to yourself and worked on it. It will help you to track the whole progress of your work and us to understand what is completed. Repository on GitHub [https://github.com/BinaryStudioAcademy/thread-net](https://github.com/BinaryStudioAcademy/thread-net)
-
-  💻 Happy coding! 😊
